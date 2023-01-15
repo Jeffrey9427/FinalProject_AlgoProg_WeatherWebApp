@@ -1,0 +1,55 @@
+{% extends 'weatherapp/base.html' %}
+
+{% block header %}
+
+<div class="mx-0 my-lg-5">
+    <p style="font-size: 60px">Register an Account</p>
+</div>
+
+{% endblock %}
+
+{% block content %}
+
+<div>
+    <form method="POST" class="my-3 mb-5" action="{% url 'users:register' %}">
+        {% csrf_token %}
+        <div class="mb-lg-5">
+            {{form.username}}
+        </div>
+        <div class="mb-lg-5">
+            {{form.email}}
+        </div>
+        <div class="mb-lg-5">
+            {{form.password1}}
+        </div>
+        <div class="mb-lg-5">
+            {{form.password2}}
+        </div>
+        <div>
+            <input type="submit" name="Create User" style="font-weight:bold; color: black; background-color: rgba(130, 196, 244 , 1); 
+            border-radius: .5rem; border: none" value="Register Account">
+        </div>
+    </form>
+</div>
+
+{{form.errors}}
+
+<div class="mt-4">
+    <div>
+        Already have an account? <a href="{% url 'users:login' %}">Login</a>
+    </div>
+</div>
+
+<script>
+    var form_fields = document.getElementsByTagName('input');
+    form_fields[1].placeholder = "Username..";
+    form_fields[2].placeholder = "Email..";
+    form_fields[3].placeholder = "Enter password..";
+    form_fields[4].placeholder = "Re-enter password..";
+
+    for (var field in form_fields){
+        form_fields[field].className += 'form-control';
+    }
+</script>
+
+{% endblock %}

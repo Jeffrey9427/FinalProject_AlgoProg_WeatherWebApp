@@ -1,0 +1,68 @@
+{% extends 'weatherapp/base.html' %}
+{% load static %}
+
+{% block header %}
+<div class="mx-lg-5 mt-lg-5 mb-lg-4">
+    <h1 style="font-size: 50px">Weather Forecast for the Next Days</p>
+</div>
+{% endblock %}
+
+{% block content %}
+<div>
+    <form method="POST" class="my-3 mb-5 mx-lg-5" action="{% url 'forecast' %}">
+        {% csrf_token %}
+        <div class="mb-lg-3">
+            <label for="place" class="form-label my-2">Enter a place</label>
+            <input type="text" class="form-control" placeholder="Place" name="place" id="place">
+        </div>
+        <div class="mb-lg-3">
+            <label for="range" class="form-label my-2">Forecast Days <span style="color: rgb(122, 122, 122)">(Select the number of forecasted days [1-5])</span> </label> 
+            <input type="range" class="form-range" id="days" min="1" max="5" name="days">
+        </div>
+        <div class="mb-lg-3">
+            <p style="font-size: 15px">Select data to view</p>
+            <select class="form-select mb-lg-5" name="option" id="option" aria-label=".form-select">
+                <option value="Temperature">Temperature</option>
+                <option value="Sky">Sky</option>
+            </select>
+        </div>
+        <div class="mb-lg-4">
+            <input type="submit" style="font-weight:bold; color: black; background-color: rgba(130, 196, 244 , 1); 
+            border-radius: .5rem; border: none; padding: 5px 10px" value="Forecast">
+        </div>
+    </form>
+
+    <h3 class="mb-3 mx-lg-5">{{ tostring }}</h3>
+
+    <div class="mt-lg-4 mx-lg-5 mb-lg-5">
+        <!-- {% if place %} -->
+            <!-- {% if forecast_api.cod == "200" %} -->
+                
+            <!-- {% else %}
+                <p>The place you entered is not available or inappropriate</p>
+            {% endif %} -->
+        <!-- {% endif %} -->
+
+            <div>
+                {% if option == "Temperature" %}
+                    <div>
+                        {% autoescape off %}
+                            {{plot_div|safe}}
+                        {% endautoescape %} 
+                    </div>
+                {% else %}
+                    <div class="d-flex flex-wrap flex-row d-inline me-lg-3 gap-4">
+                        {% for time, icon in sky.items %}
+                            <div class="d-inline">
+                                <img src="{% static icon %}" alt="sky_condition" class="mx-auto" style="width: 150px">
+                                <div>{{time}}</div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        
+    </div>
+
+</div>
+{% endblock %}

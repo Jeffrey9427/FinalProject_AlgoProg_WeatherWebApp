@@ -1,0 +1,75 @@
+{% extends 'weatherapp/base.html' %}     <!-- use the base citation file (acts as parent template using inheritance concept) -->
+
+{% block header %}       <!-- pull out the header and put into the base.html  -->
+
+<p class="ms-lg-0 mx-0 my-lg-3" style="font-size: 35px">This web app is developed by Jeffrey for Algorithm and Programming Final Project.</p>
+
+<br>
+
+<p class="ms-lg-0 mx-0 mb-lg-5" style="font-size: 35px">In this web app, you could find out whether the place you staying has a good air quality and
+    moreover, you can forecast the weather in your city. In this about page, you could check the
+    city available for its AQI information. </p>
+
+{% endblock %}
+
+{% block content %}      <!-- pull out the content and put into the base.html -->
+
+<div class="mx-0 my-2">
+    <p style="font-size: 50px">Check State Available in a Country</p>
+    <form action="{% url 'about' %}" class="my-2 row g-3 mb-5" role="search" method="POST">
+        {% csrf_token %}            <!--  -->
+        <div class="col-lg-11">
+            <input class="form-control me-3" type="search" placeholder="Enter country" aria-label="Search" name="country-for-state">    
+        </div>
+        <div class="col-lg-1">
+            <button class="btn" style="font-weight:bold; color: black; background-color: rgba(130, 196, 244 , 1); 
+            border-radius: .5rem; border-color: none" type="submit" name="find-state">Search</button>
+        </div>
+    </form>
+
+    {% if state_api %}
+        {% if state_api.status == 'success' %}
+            <ol class="list-group list-group-numbered">
+                {% for state in states %}
+                    <li class="list-group-item">{{ state }}</li>
+                {% endfor %}
+            </ol>
+        {% else %}
+            <p>The country entered is either unavailable or inappropriate.</p>
+        {% endif %}
+    {% endif %}
+</div>
+
+<hr width="90%">
+
+<div class="mx-0 my-2">
+    <p class="my-4" style="font-size: 50px">Check City Available in a State</p>
+    <form action="{% url 'about' %}" class="my-1 row g-3 mb-5" role="search" method="POST">
+        {% csrf_token %}
+        <div class="col-lg-6">
+            <input class="form-control me-2" type="search" placeholder="Enter country" aria-label="Search" name="country-for-city">
+        </div>
+        <div class="col-lg-5">
+            <input class="form-control me-2" type="search" placeholder="Enter state" aria-label="Search" name="state">
+        </div>
+        <div class="col-lg-1">
+            <button class="btn" style="font-weight:bold; color: black; background-color: rgba(130, 196, 244 , 1); 
+            border-radius: .5rem; border-color: none" type="submit" name="find-city">Search</button>
+        </div>
+    </form>
+
+    {% if city_api %}
+        {% if city_api.status == 'success' %}
+            <ol class="list-group list-group-numbered">
+                {% for city in cities %}
+                    <li class="list-group-item">{{ city }}</li>
+                {% endfor %}
+            </ol>
+        {% else %}
+            <p>The country or state entered is either unavailable or inappropriate.</p>
+        {% endif %}
+    {% endif %}
+
+</div>
+
+{% endblock %}
