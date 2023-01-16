@@ -188,9 +188,11 @@ class ForecastProcessor:
     
     # defining a method for filtering the data retrieved from the API
     def get_data(self, forecast_days):
-        filtered_data = self.forecast_api['list']    
-        nr_values = 8 * int(forecast_days)
-        return filtered_data[:nr_values]
+        if self.forecast_api['cod'] == "200": 
+            filtered_data = self.forecast_api['list']    
+            nr_values = 8 * int(forecast_days)
+            return filtered_data[:nr_values]
+        return []
 
 # decorator to check whether the user is logged in, and if not, redirects the user to login_url
 @login_required(login_url='users/login')
